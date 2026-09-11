@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تطبيق أوراق عمل الصف الخامس - مدارس البيارق الأهلية</title>
+    <style>
+        :root {
+            --primary-color: #0d5c3a;
+            --primary-dark: #073823;
+            --accent-color: #d4af37;
+            --accent-light: #fff8dc;
+            --bg-color: #f4f7f6;
+            --text-color: #333;
+            --white: #ffffff;
+            --shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            direction: rtl;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary-color));
+            color: var(--white);
+            padding: 1.5rem;
+            text-align: center;
+            border-bottom: 5px solid var(--accent-color);
+            box-shadow: var(--shadow);
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            color: var(--accent-color);
+        }
+
+        header p {
+            font-size: 1rem;
+            opacity: 0.95;
+            margin-bottom: 3px;
+        }
+
+        nav {
+            background-color: var(--primary-dark);
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            padding: 10px;
+            flex-wrap: wrap;
+        }
+
+        nav button {
+            background-color: transparent;
+            color: var(--white);
+            border: 2px solid var(--accent-color);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        nav button:hover, nav button.active {
+            background-color: var(--accent-color);
+            color: var(--primary-dark);
+        }
+
+        main {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            flex: 1;
+            width: 100%;
+        }
+
+        .section {
+            display: none;
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        h2 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: var(--primary-dark);
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .btn-start {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+            transition: background 0.3s;
+        }
+
+        .btn-start:hover {
+            background-color: var(--primary-dark);
+        }
+
+        /* Staff Info Grid */
+        .staff-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            background: var(--accent-light);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid var(--accent-color);
+            margin-top: 15px;
+        }
+
+        .staff-item {
+            text-align: center;
+        }
+
+        .staff-item strong {
+            display: block;
+            color: var(--primary-dark);
+            font-size: 0.9rem;
+        }
+
+        .staff-item span {
+            color: #444;
+            font-weight: bold;
+        }
+
+        /* Tables & Vocabulary */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+
+        .table-img {
+            width: 80px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .flashcards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 15px;
+            margin-top: 1rem;
+        }
+
+        .card {
+            background-color: var(--white);
+            border: 2px solid var(--accent-color);
+            border-radius: 10px;
+            overflow: hidden;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .card img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+        }
+
+        .card-body {
+            padding: 12px;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            direction: ltr;
+        }
+
+        .card-desc {
+            font-size: 0.85rem;
+            color: #555;
+            margin-top: 5px;
+            display: none;
+        }
+
+        /* Reading Passage Box */
+        .passage-box {
+            background-color: #f0f4f2;
+            border-right: 5px solid var(--primary-color);
+            padding: 1.5rem;
+            border-radius: 8px;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+            direction: ltr;
+            text-align: left;
+        }
+
+        .passage-ar {
+            direction: rtl;
+            text-align: right;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px dashed #ccc;
+            color: #444;
+            font-size: 0.95rem;
+        }
+
+        /* Who Wants to Be a Millionaire Game Section */
+        .millionaire-container {
+            background: linear-gradient(180deg, #091224 0%, #030712 100%);
+            color: #ffffff;
+            padding: 25px;
+            border-radius: 16px;
+            border: 3px solid var(--accent-color);
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        }
+
+        .lifelines {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .lifeline-btn {
+            background: #1e293b;
+            border: 2px solid var(--accent-color);
+            color: #fff;
+            padding: 10px 18px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+
+        .lifeline-btn:hover:not(:disabled) {
+            background: var(--accent-color);
+            color: #000;
+        }
+
+        .lifeline-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            border-color: #555;
+        }
+
+        .game-question {
+            background: #1e293b;
+            border: 2px solid var(--accent-color);
+            padding: 20px;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            direction: ltr;
+            font-weight: bold;
+        }
+
+        .game-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            direction: ltr;
+        }
+
+        .option-btn {
+            background: #0f172a;
+            border: 2px solid #334155;
+            color: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            text-align: left;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .option-btn:hover {
+            border-color: var(--accent-color);
+            background: #1e293b;
+        }
+
+        .audience-chart {
+            display: none;
+            justify-content: space-around;
+            align-items: flex-end;
+            height: 120px;
+            background: #0f172a;
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #334155;
+        }
+
+        .bar-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.85rem;
+        }
+
+        .bar {
+            width: 35px;
+            background: var(--accent-color);
+            color: #000;
+            font-weight: bold;
+            border-radius: 4px 4px 0 0;
+            transition: height 0.5s ease-in-out;
+        }
+
+        /* Certificate Styles */
+        .certificate-box {
+            border: 10px double var(--accent-color);
+            padding: 2.5rem;
+            text-align: center;
+            background: #fffdf5;
+            border-radius: 12px;
+            position: relative;
+        }
+
+        .certificate-box h3 {
+            color: var(--primary-color);
+            font-size: 2.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .certificate-student {
+            font-size: 2rem;
+            color: var(--accent-color);
+            margin: 1rem 0;
+            font-weight: bold;
+            border-bottom: 2px solid var(--accent-color);
+            display: inline-block;
+            padding: 0 30px;
+        }
+
+        .signatures-grid {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 3rem;
+            padding-top: 1.5rem;
+            border-top: 2px dashed #ddd;
+            direction: ltr;
+        }
+
+        .sig-block {
+            text-align: center;
+        }
+
+        .sig-block strong {
+            display: block;
+            color: var(--primary-color);
+        }
+
+        .btn-print {
+            background-color: var(--accent-color);
+            color: var(--primary-dark);
+            padding: 12px 25px;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 1.05rem;
+            cursor: pointer;
+            margin-top: 1.5rem;
+            transition: background 0.3s;
+        }
+
+        .btn-print:hover {
+            background-color: #b89628;
+        }
+
+        @media print {
+            header, nav, .btn-print, .section:not(#certificate-section) {
+                display: none !important;
+            }
+            body { background: white; }
+            #certificate-section {
+                display: block !important;
+                border: none;
+            }
+            .certificate-box {
+                border: 10px double var(--accent-color);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>مدارس البيارق الأهلية</h1>
+        <p>إدارة الإشراف والتطوير التربوي - القسم الابتدائي</p>
+        <p>التطبيق التفاعلي لأوراق عمل اللغة الإنجليزية - الصف الخامس (Worksheet 2 - Pages 3 & 4)</p>
+    </header>
+
+    <nav>
+        <button onclick="showSection('welcome-section')" class="active">الرئيسية</button>
+        <button onclick="showSection('explain-section')">الشرح والمفردات</button>
+        <button onclick="showSection('passage-section')">قطعة القراءة</button>
+        <button onclick="showSection('quiz-section')">مسابقة من سيربح المليون</button>
+        <button onclick="showSection('certificate-section')">الشهادة</button>
+    </nav>
+
+    <main>
+        <!-- 1. Welcome & Student Info -->
+        <div id="welcome-section" class="section active">
+            <h2>مرحباً بك في التطبيق التفاعلي!</h2>
+            <p style="margin-bottom: 1.5rem;">عزيزي طالب الصف الخامس الابتدائي، سجل بياناتك أولاً لاستخدام التطبيق والحصول على شهادة التميز عند اجتياز المسابقة.</p>
+            
+            <div class="form-group">
+                <label for="studentName">اسم الطالب الثلاثي:</label>
+                <input type="text" id="studentName" placeholder="أدخل اسمك الثلاثي...">
+            </div>
+            <div class="form-group">
+                <label for="studentClass">الصف / الفصل:</label>
+                <input type="text" id="studentClass" placeholder="مثال: 5 / 1" value="5 / ">
+            </div>
+
+            <div class="staff-grid">
+                <div class="staff-item">
+                    <strong>معلم المادة:</strong>
+                    <span>Mr. Mohamed Abdullah Attia</span>
+                </div>
+                <div class="staff-item">
+                    <strong>المشرف التربوي:</strong>
+                    <span>Mr. Mohammed Othman</span>
+                </div>
+                <div class="staff-item">
+                    <strong>قائد المدرسة:</strong>
+                    <span>Mr. Wael Jaafari</span>
+                </div>
+            </div>
+
+            <button class="btn-start" style="margin-top: 20px;" onclick="saveStudentInfo()">حفظ وابدأ التعلم</button>
+        </div>
+
+        <!-- 2. Explanation & Vocabulary -->
+        <div id="explain-section" class="section">
+            <h2>المفردات والمقارنات (Worksheet 2 - Page 3)</h2>
+            
+            <h3>1. American English vs. British English</h3>
+            <p style="margin-bottom: 10px; color: #555;">جدول المقارنة بين اللهجتين الأمريكية والبريطانية مدعوم بالصور التوضيحية:</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>الصورة</th>
+                        <th>American English</th>
+                        <th>British English</th>
+                        <th>المعنى بالعربية</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=100&h=60&fit=crop" class="table-img" alt="Vacation"></td>
+                        <td>Vacation</td>
+                        <td>Holiday</td>
+                        <td>إجازة / عطلة</td>
+                    </tr>
+                    <tr>
+                        <td><img src="https://images.unsplash.com/photo-1578916171728-46686eac8d58?w=100&h=60&fit=crop" class="table-img" alt="Store"></td>
+                        <td>Store</td>
+                        <td>Shop</td>
+                        <td>متجر / محل</td>
+                    </tr>
+                    <tr>
+                        <td><img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=100&h=60&fit=crop" class="table-img" alt="Elevator"></td>
+                        <td>Elevator</td>
+                        <td>Lift</td>
+                        <td>مصعد</td>
+                    </tr>
+                    <tr>
+                        <td><img src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=100&h=60&fit=crop" class="table-img" alt="Truck"></td>
+                        <td>Truck</td>
+                        <td>Lorry</td>
+                        <td>شاحنة</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 style="margin-top: 2rem;">2. بطاقات المفردات والتعريفات (Definitions)</h3>
+            <p style="margin-bottom: 0.5rem; color: #666;">اضغط على البطاقة لعرض التعريف بالإنجليزي:</p>
+            
+            <div class="flashcards-grid">
+                <div class="card" onclick="toggleCard(this)">
+                    <img src="https://images.unsplash.com/photo-1513151233558-d860c5398176?w=300&h=140&fit=crop" alt="Invitation">
+                    <div class="card-body">
+                        <div class="card-title">Invitation</div>
+                        <div class="card-desc">A card/paper sent to ask someone to come to an event</div>
+                    </div>
+                </div>
+
+                <div class="card" onclick="toggleCard(this)">
+                    <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=300&h=140&fit=crop" alt="Greet">
+                    <div class="card-body">
+                        <div class="card-title">Greet</div>
+                        <div class="card-desc">To welcome or say hello to a person</div>
+                    </div>
+                </div>
+
+                <div class="card" onclick="toggleCard(this)">
+                    <img src="https://images.unsplash.com/photo-1508962914676-134849a727f0?w=300&h=140&fit=crop" alt="On time">
+                    <div class="card-body">
+                        <div class="card-body">
+                            <div class="card-title">On time</div>
+                            <div class="card-desc">Arriving at the exact time you should</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Reading Passage -->
+        <div id="passage-section" class="section">
+            <h2>قطعة القراءة (Reading Comprehension - Page 4)</h2>
+            <div class="passage-box">
+                <p><strong>A Special Invitation</strong></p>
+                <p>Ali received an <strong>invitation</strong> to Omar's birthday party next Saturday. The party will be at the park. Ali wants to arrive <strong>on time</strong>, so he checked the bus schedule. He bought a present from the department <strong>store</strong> yesterday. When Ali meets his friends, he likes to <strong>greet</strong> them with a big smile.</p>
+                
+                <div class="passage-ar">
+                    <strong>الترجمة العربية:</strong>
+                    تلقى علي دعوة لحفل عيد ميلاد عمر السبت القادم. سيكون الحفل في الحديقة. يرغب علي في الوصول في الوقت المحدد، لذلك تحقق من جدول الحافلات. اشترى هدية من المتجر يوم أمس. عندما يلتقي علي بأصدقائه، يحب أن يحييهم بابتسامة عريضة.
+                </div>
+            </div>
+            
+            <h3>الأسئلة التحليلية للنص:</h3>
+            <ul style="margin-right: 1.5rem; line-height: 1.8; margin-top: 10px;">
+                <li><strong>Where is the party?</strong> At the park.</li>
+                <li><strong>When did Ali buy the present?</strong> Yesterday.</li>
+                <li><strong>How does Ali greet his friends?</strong> With a big smile.</li>
+            </ul>
+        </div>
+
+        <!-- 4. Who Wants to Be a Millionaire Game -->
+        <div id="quiz-section" class="section">
+            <h2>مسابقة من سيربح المليون (Worksheet 2 Assessment)</h2>
+            
+            <div class="millionaire-container">
+                <div class="lifelines">
+                    <button class="lifeline-btn" id="btn5050" onclick="use5050()">✂️ حذف إجابتين (50:50)</button>
+                    <button class="lifeline-btn" onclick="callFriend()">📞 الاتصال بصديق</button>
+                    <button class="lifeline-btn" onclick="askAudience()">👥 رأي الجمهور</button>
+                </div>
+
+                <div class="game-question" id="gameQuestion">جاري إعداد السؤال...</div>
+
+                <div class="game-options" id="optionsContainer"></div>
+
+                <div class="audience-chart" id="audienceChart">
+                    <div class="bar-wrap"><div class="bar" id="barA"></div>A</div>
+                    <div class="bar-wrap"><div class="bar" id="barB"></div>B</div>
+                    <div class="bar-wrap"><div class="bar" id="barC"></div>C</div>
+                    <div class="bar-wrap"><div class="bar" id="barD"></div>D</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. Certificate -->
+        <div id="certificate-section" class="section">
+            <h2>شهادة التميز والتقدير الإلكترونية</h2>
+            <div class="certificate-box">
+                <p style="font-weight: bold; color: #666; font-size: 1.1rem;">Al-Bayariq Private Schools - Elementary Section</p>
+                <h3>Electronic Certificate of Excellence</h3>
+                <p style="font-size: 1.1rem;">This is to certify that student:</p>
+                <div class="certificate-student" id="certName">اسم الطالب</div>
+                <p style="font-size: 1.1rem;">Grade / Class: <span id="certClass" style="font-weight: bold; color: var(--primary-color);">5 / 1</span></p>
+                <p style="margin: 1.5rem 0; font-size: 1.15rem; line-height: 1.6;">has successfully completed all interactive exercises and passed the <strong>"Who Wants to Be a Millionaire" Quiz</strong> for English Language (Worksheet 2 - Pages 3 & 4) with outstanding performance.</p>
+
+                <div class="signatures-grid">
+                    <div class="sig-block">
+                        <strong>English Teacher</strong>
+                        <span>Mr. Mohamed Abdullah Attia</span>
+                    </div>
+                    <div class="sig-block">
+                        <strong>English Supervisor</strong>
+                        <span>Mr. Mohammed Othman</span>
+                    </div>
+                    <div class="sig-block">
+                        <strong>School Principal</strong>
+                        <span>Mr. Wael Jaafari</span>
+                    </div>
+                </div>
+            </div>
+            <button class="btn-print" onclick="window.print()">🖨️ طباعة الشهادة / حفظ كـ PDF</button>
+        </div>
+    </main>
+
+    <script>
+        let studentData = {
+            name: '',
+            class: ''
+        };
+
+        // Web Audio Synthesizer for Sound Effects
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSound(type) {
+            try {
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                if (type === 'correct') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(587.33, audioCtx.currentTime); // D5
+                    osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.15); // A5
+                    gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.4);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.4);
+                } else if (type === 'wrong') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.4);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.4);
+                } else if (type === 'lifeline') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.3);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.3);
+                }
+            } catch (e) {}
+        }
+
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(sec => sec.classList.remove('active'));
+            
+            const navButtons = document.querySelectorAll('nav button');
+            navButtons.forEach(btn => btn.classList.remove('active'));
+
+            document.getElementById(sectionId).classList.add('active');
+        }
+
+        function saveStudentInfo() {
+            const nameInput = document.getElementById('studentName').value.trim();
+            const classInput = document.getElementById('studentClass').value.trim();
+
+            if(!nameInput) {
+                alert('يرجى كتابة اسم الطالب أولاً.');
+                return;
+            }
+
+            studentData.name = nameInput;
+            studentData.class = classInput;
+
+            document.getElementById('certName').innerText = nameInput;
+            document.getElementById('certClass').innerText = classInput;
+
+            alert('تم حفظ البيانات بنجاح! يمكنك الآن الانتقال للشرح والمسابقة.');
+            showSection('explain-section');
+        }
+
+        function toggleCard(cardElement) {
+            const desc = cardElement.querySelector('.card-desc');
+            if (desc.style.display === 'block') {
+                desc.style.display = 'none';
+            } else {
+                desc.style.display = 'block';
+            }
+        }
+
+        // Millionaire Game Logic
+        const quizQuestions = [
+            {
+                q: "1. In American English, 'Holiday' is called ............",
+                options: ["Vacation", "Store", "Lift", "Lorry"],
+                correct: 0
+            },
+            {
+                q: "2. British people say 'Lift', but Americans say .............",
+                options: ["Truck", "Elevator", "Shop", "Holiday"],
+                correct: 1
+            },
+            {
+                q: "3. What is the meaning of 'Greet'?",
+                options: ["To arrive on time", "To welcome or say hello", "A card sent for an event", "To buy something"],
+                correct: 1
+            },
+            {
+                q: "4. Where was Omar's birthday party in the passage?",
+                options: ["At school", "At the store", "At the park", "In the truck"],
+                correct: 2
+            },
+            {
+                q: "5. 'On time' means arriving at the exact time you should. (True / False)",
+                options: ["True", "False", "Not mentioned", "None of these"],
+                correct: 0
+            }
+        ];
+
+        let currentQIndex = 0;
+
+        function loadMillionaireQuestion() {
+            if(currentQIndex >= quizQuestions.length) {
+                finishGame();
+                return;
+            }
+
+            const qData = quizQuestions[currentQIndex];
+            document.getElementById('gameQuestion').innerText = qData.q;
+            document.getElementById('audienceChart').style.display = 'none';
+
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+
+            qData.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerHTML = `<strong>${String.fromCharCode(65 + idx)}:</strong> ${opt}`;
+                btn.onclick = () => checkAnswer(idx);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(selectedIdx) {
+            const correctIdx = quizQuestions[currentQIndex].correct;
+            if(selectedIdx === correctIdx) {
+                playSound('correct');
+                alert('إجابة صحيحة! أحسنت 👏');
+                currentQIndex++;
+                loadMillionaireQuestion();
+            } else {
+                playSound('wrong');
+                alert('إجابة خاطئة! حاول مرة أخرى.');
+            }
+        }
+
+        function use5050() {
+            playSound('lifeline');
+            const correctIdx = quizQuestions[currentQIndex].correct;
+            const buttons = document.querySelectorAll('.option-btn');
+            let removed = 0;
+
+            buttons.forEach((btn, idx) => {
+                if(idx !== correctIdx && removed < 2) {
+                    btn.style.visibility = 'hidden';
+                    removed++;
+                }
+            });
+            document.getElementById('btn5050').disabled = true;
+        }
+
+        function callFriend() {
+            playSound('lifeline');
+            const correctIdx = quizQuestions[currentQIndex].correct;
+            const letter = String.fromCharCode(65 + correctIdx);
+            alert(`📞 الصديق يقول: "أنا واثق بنسبة 90% أن الإجابة الصحيحة هي (${letter})".`);
+        }
+
+        function askAudience() {
+            playSound('lifeline');
+            const chart = document.getElementById('audienceChart');
+            chart.style.display = 'flex';
+            
+            const correctIdx = quizQuestions[currentQIndex].correct;
+            const bars = ['barA', 'barB', 'barC', 'barD'];
+            
+            bars.forEach((barId, idx) => {
+                const bar = document.getElementById(barId);
+                let percent = idx === correctIdx ? 75 : 8;
+                bar.style.height = `${percent}%`;
+                bar.innerText = `${percent}%`;
+            });
+        }
+
+        function finishGame() {
+            if(!studentData.name) {
+                alert('تهانينا! لقد أكملت اللعبة بنجاح. يرجى كتابة اسمك في الصفحة الرئيسية لإيقاف إصدار الشهادة.');
+                showSection('welcome-section');
+                return;
+            }
+
+            alert(`مبارك يا ${studentData.name}! لقد ربحت المليون في مسابقة اللغة الإنجليزية وحصلت على الشهادة 🏆`);
+            showSection('certificate-section');
+        }
+
+        // Initialize First Question on Load
+        loadMillionaireQuestion();
+    </script>
+</body>
+</html>
